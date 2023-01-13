@@ -31,8 +31,31 @@ repos:
           - mdformat-gfm
           - mdformat-tables
         # exclude: ^docs\/(changelog|contributing|license|readme|actions\/(pre-commit))\.md$
+  - repo: https://github.com/tox-dev/pyproject-fmt
+    rev: 0.5.0
+    hooks:
+      - id: pyproject-fmt
+  - repo: https://github.com/tox-dev/tox-ini-fmt
+    rev: 0.6.1
+    hooks:
+      - id: tox-ini-fmt
+  - repo: https://github.com/psf/black
+    rev: 22.12.0
+    hooks:
+      - id: black-jupyter
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.13.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort
   - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
-    rev: v9.3.0
+    rev: v9.4.0
     hooks:
       - id: commitlint
         stages: [commit-msg]
