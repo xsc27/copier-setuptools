@@ -1,0 +1,148 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xsc27.copier_template"
+description = "Not a real package."
+# readme = "README.md"
+# version = "0.0.0"
+dynamic = ["readme", "version"]
+authors = [{name = "Carlos Meza", email = "hire@carlosmeza.com"}]
+license = {text = "Apache Software License 2.0"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    # "Development Status :: 3 - Alpha",
+    # "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    # "Programming Language :: Python :: 3.12",
+]
+keywords = [
+    "digitalroots",
+    "copier",
+    "copier-template",
+]
+dependencies = [
+]
+
+[project.optional-dependencies]
+docs = [
+    "mdx-truly-sane-lists",
+    "mkdocs-exclude",
+    "mkdocs-gen-files",
+    "mkdocs-jupyter",
+    "mkdocs-literate-nav",
+    "mkdocs-material",
+    "mkdocs-minify-plugin",
+    "mkdocs-redirects !=1.0.4",
+    "mkdocs-section-index",
+    "mkdocstrings-python",
+    "notebook",  # required to execute Jupyter Notebooks
+]
+lint = [
+    "bandit[toml]",
+    "dlint",
+    "flake8-bugbear",
+    "flake8-comprehensions",
+    "flake8-debugger",
+    "flake8-docstrings",
+    "flake8-eradicate",
+    "flake8-pytest-style",
+    "flake8-rst-docstrings",
+    "flake8-simplify",
+    "pep8-naming",
+    "pylint >= 2.15.0",  # Support for py3.11+
+]
+test = [
+    "pytest-cov",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/xsc27/copier-setuptools"
+"Changelog" = "https://github.com/xsc27/copier-setuptools/blob/trunk/CHANGELOG.md"
+"Issues" = "https://github.com/xsc27/copier-setuptools/issues"
+"Source" = "https://github.com/xsc27/copier-setuptools"
+
+[project.scripts]
+copier_template_test = "copier_template_test.cli:run"
+
+[tool.setuptools]
+zip-safe = true
+dynamic.readme = {file = ["README.md"], content-type = "text/markdown"}
+packages.find.where = ["src"]
+
+[tool.setuptools_scm]
+
+[tool.bandit]
+skips = [
+    "B404",  # import-subprocess
+]
+[tool.bandit.assert_used]
+skips = ["**/tests/test_*.py"]
+
+[tool.black]
+line-length = 98
+
+[tool.coverage.run]
+branch = true
+omit = ["tests/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if not config.dryrun",
+]
+
+[tool.flake8]
+# Setting are in tox.ini because
+# flake8 does not support pyproject.toml
+
+[tool.isort]
+profile = "black"
+line_length = 98
+known_first_party = "copier_template_test"
+
+[tool.pylint.config]
+max-line-length = 98
+persistent = "no"
+enable = [
+    "F",  # Fatal
+    "E",  # Error
+    "W",  # Warning
+    "C",  # Convention
+    "I",  # Informational
+]
+disable = [
+    "R",  # Refactor
+    "fixme",
+    "locally-disabled",
+    # "line-too-long",  # redundant from flake8
+    # "missing-class-docstring",  # redundant from flake8-docstrings
+    # "missing-function-docstring",  # redundant from flake8-docstrings
+    # "missing-module-docstring",  # redundant from flake8-docstrings
+    "suppressed-message",
+    # "undefined-variable",  # redundant from flake8
+    # "ungrouped-imports",  # redundant from isort
+    # "unused-variable",  # redundant from flake8
+    # "method-cache-max-size-none",  # redundant from bugbear
+]
+
+[tool.pytest.ini_options]
+addopts = '--verbosity=2 --doctest-modules --ignore=docs --showlocals -rfp --strict-markers --cov-report=term --cov'
+log_cli = false
+log_level = 'DEBUG'
+log_cli_level = 'INFO'
+log_file_level = 'DEBUG'
+testpaths = ['tests']

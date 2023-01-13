@@ -1,0 +1,9 @@
+extends:
+  # https://github.com/conventional-changelog/commitlint/tree/master/%40commitlint/config-conventional
+  - "@commitlint/config-conventional"
+
+# https://commitlint.js.org/#/reference-rules
+rules:
+  body-max-line-length: [1, always, 72]
+  footer-max-line-length: [2, always, 72]
+  header-max-length: [2, always, 72]
