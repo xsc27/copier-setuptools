@@ -1,0 +1,139 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "setuptools_scm[toml]>=6.2", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{ package_name }}"
+description = "{{ project_short_description }}"
+# readme = "README.md"
+# version = "0.0.0"
+dynamic = ["readme", "version"]
+authors = [{name = "{{ full_name }}", email = "{{ email }}"}]
+license = {text = "Apache Software License 2.0"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    # "Development Status :: 2 - Pre-Alpha",
+    # "Development Status :: 3 - Alpha",
+    # "Development Status :: 4 - Beta",
+    # "Development Status :: 5 - Production/Stable",
+    # "Development Status :: 6 - Mature",
+    # "Development Status :: 7 - Inactive
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = [
+    "digitalroots",
+]
+dependencies = [
+]
+
+[project.optional-dependencies]
+docs = [
+    "mdx-truly-sane-lists",
+    "mkdocs-exclude",
+    "mkdocs-gen-files",
+    "mkdocs-jupyter",
+    "mkdocs-literate-nav",
+    "mkdocs-material",
+    "mkdocs-minify-plugin",
+    "mkdocs-redirects !=1.0.4",
+    "mkdocs-section-index",
+    "mkdocstrings-python",
+    "notebook",  # required to execute Jupyter Notebooks
+]
+lint = [
+    "bandit[toml]",
+    "pylint >= 2.15",  # Support for py3.11+
+]
+test = [
+    "pytest-cov",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/{{ github_username }}/{{ package_name }}"
+"Changelog" = "https://github.com/{{ github_username }}/{{ package_name }}/blob/trunk/CHANGELOG.md"
+"Issues" = "https://github.com/{{ github_username }}/{{ package_name }}/issues"
+"Source" = "https://github.com/{{ github_username }}/{{ package_name }}"
+
+[project.scripts]
+{{ package_name }} = "{{ package_name }}.cli:run"
+
+[tool.setuptools]
+zip-safe = true
+dynamic.readme = {file = ["README.md"], content-type = "text/markdown"}
+packages.find.where = ["src"]
+
+[tool.setuptools_scm]
+
+[tool.bandit]
+skips = [
+    "B404",  # import-subprocess
+]
+[tool.bandit.assert_used]
+skips = [
+    "**/test_*.py",
+]
+
+[tool.black]
+line-length = 98
+
+[tool.coverage.run]
+branch = true
+omit = ["tests/*"]
+source_pkgs = ["{{ package_name }}"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if not config.dryrun",
+]
+
+[tool.flake8]
+# Setting are in tox.ini because
+# flake8 does not support pyproject.toml
+
+[tool.isort]
+profile = "black"
+line_length = 98
+known_first_party = "{{ package_name }}"
+
+[tool.pylint.config]
+max-line-length = 98
+persistent = "no"
+enable = [
+    "F",  # Fatal
+    "E",  # Error
+    "W",  # Warning
+    "C",  # Convention
+    "I",  # Informational
+]
+disable = [
+    "R",  # Refactor
+    "fixme",
+    "locally-disabled",
+    # "line-too-long",  # redundant from flake8
+    # "missing-class-docstring",  # redundant from flake8-docstrings
+    # "missing-function-docstring",  # redundant from flake8-docstrings
+    # "missing-module-docstring",  # redundant from flake8-docstrings
+    "suppressed-message",
+    # "undefined-variable",  # redundant from flake8
+    # "ungrouped-imports",  # redundant from isort
+    # "unused-variable",  # redundant from flake8
+    # "method-cache-max-size-none",  # redundant from bugbear
+]
+
+[tool.pytest.ini_options]
+addopts = '--verbosity=2 --doctest-modules --ignore=docs --showlocals -rfp --strict-markers --cov-report=term --cov'
+log_cli = false
+log_level = 'DEBUG'
+log_cli_level = 'INFO'
+log_file_level = 'DEBUG'
+testpaths = ['tests']

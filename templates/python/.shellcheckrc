@@ -1,0 +1,4 @@
+enable=all
+disable=SC2292
+
+# SC2292 - Prefer `[[ ]]` over `[ ]`

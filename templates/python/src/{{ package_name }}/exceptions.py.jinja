@@ -1,0 +1,9 @@
+"""Exceptions."""
+
+
+class {{ project_name.title().replace(' ', '') }}Error(Exception):
+    """Butler Manager exception base class."""
+
+    def __init__(self, err: str) -> None:
+        """Initialize exception."""
+        super().__init__(err)
