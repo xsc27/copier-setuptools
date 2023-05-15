@@ -59,6 +59,7 @@ def tempdir(request: FixtureRequest) -> Iterable[Path]:
 
 @pytest.fixture(scope="session")
 def copier_project(tempdir: Path):
+    """Return Copier object after autorun."""
     copier = Worker(
         src_path=str(Path.cwd()),
         dst_path=tempdir,
