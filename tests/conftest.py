@@ -1,7 +1,6 @@
 """Pytest shared resources."""
 import logging
 import os
-import shutil
 import tempfile
 from datetime import datetime
 from pathlib import Path
@@ -30,14 +29,15 @@ def pytest_runtest_makereport(item: Item, call: CallInfo[None]):
     """Report test phase results."""
     outcome: _Result = yield
     rep = outcome.get_result()
-    item.stash.setdefault(PHASE_REPORT_KEY, {})[rep.when] = rep
+    # item.stash.setdefault(PHASE_REPORT_KEY, {})[rep.when] = rep
+    item.stash[PHASE_REPORT_KEY] = {rep.when: rep}
 
 
 @pytest.fixture(scope="session")
 def tempdir(request: FixtureRequest) -> Iterable[Path]:
     """Generate temporary directory and cleanup."""
     outdir_base = None
-    reuse_dir = os.getenv("REUSE_OUTDIR") or ""
+    reuse_dir = os.getenv("REUSE_OUTDIR", "")
     if reuse_dir or not os.getenvb(b"CI"):
         outdir_base = Path().cwd().parent.joinpath(LOCAL_OUTDIR).joinpath(reuse_dir)
         outdir_base.mkdir(parents=True, exist_ok=True)
@@ -45,16 +45,18 @@ def tempdir(request: FixtureRequest) -> Iterable[Path]:
     if reuse_dir and outdir_base:
         tmp = outdir_base
     else:
-        tmp = tempfile.mkdtemp(prefix=f"{datetime.now().timestamp()}-", dir=outdir_base)
+        tmp = tempfile.mkdtemp(prefix=f"{datetime.now().strftime('%Y.%m.%dT%X')}-", dir=outdir_base)
 
     yield Path(tmp)
 
+    # FIXME: Getting key not found
+    ...
     # Teardown only on "passed"
-    report = request.node.stash[PHASE_REPORT_KEY]
-    if not any(hasattr(report.get(phase), "failed") for phase in ["setup", "call"]):
-        shutil.rmtree(tmp)
-    else:
-        _LOGGER.info("OUTPUT DIR for %s, %s", request.node.nodeid, tmp)
+    # report = request.node.stash[PHASE_REPORT_KEY]
+    # if not reuse_dir or not any(hasattr(report.get(phase, ""), "failed") for phase in ["setup", "call"]):
+    #     shutil.rmtree(tmp)
+    # else:
+    #     _LOGGER.info("OUTPUT DIR for %s, %s", request.node.nodeid, tmp)
 
 
 @pytest.fixture(scope="session")

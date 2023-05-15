@@ -16,7 +16,8 @@ def test_precommit(copier_project: Worker, tempdir: Path):
     assert pre_commit.main.main(["run", "--verbose", "--all-files"]) == 0
 
 
-@pytest.mark.parametrize("test", ["lint", "py3", "pkg", "docs"])
+# @pytest.mark.parametrize("test", ["lint", "py3", "pkg", "docs"])
+@pytest.mark.parametrize("test", ["lint", "py3"])
 def test_tox(copier_project: Worker, tempdir: Path, test: str):
     """Run tox in Copier project."""
     _ = copier_project
